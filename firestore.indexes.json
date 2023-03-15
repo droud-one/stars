@@ -1,0 +1,31 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "star",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "situation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "task",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "action",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "result",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "name",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
