@@ -1,5 +1,5 @@
 import * as React from 'react';
-import fb from '../firebase';
+import fb from '../util/firebase';
 import Layout from '../components/Layout';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
@@ -14,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-const Index = () => {
+const Stars = () => {
     const [data, setData] = React.useState<any[]>([]);
     
     if (data.length < 1) {
@@ -24,7 +24,7 @@ const Index = () => {
     }
 
     return (<Layout>
-        <p>STARs:</p>
+        <p data-testid="stars-title">STARs:</p>
         {!data && <p>Loading...</p>}
         {data.map(({ id, info }) => <p key={id}>Name: {info.name}</p>)}
         <Box>
@@ -39,4 +39,4 @@ const Index = () => {
     </Layout>);
 }
 
-export default Index;
+export default Stars;

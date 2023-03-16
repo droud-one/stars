@@ -1,7 +1,9 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 import { Link as GLink } from 'gatsby';
-import "@fontsource/roboto";
-import "@fontsource/lexend";
+import { HasKidsProps } from '../types';
+import localStorage from '../util/localStorage';
+import '@fontsource/roboto';
+import '@fontsource/lexend';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import Link from '@mui/material/Link';
@@ -9,17 +11,16 @@ import Fade from '@mui/material/Fade';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import { PaletteOptions } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { createTheme, ThemeOptions, ThemeProvider } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-
-type Props = {
-    children: ReactNode,
-};
 
 const lightPalette: PaletteOptions = {
     mode: 'light',
@@ -40,6 +41,10 @@ const lightPalette: PaletteOptions = {
     },
     info: {
       main: '#79b6e4',
+    },
+    background: {
+      default: '#fcfcfc',
+      paper: '#ffffff',
     },
 };
 const darkPalette: PaletteOptions = {
@@ -129,7 +134,7 @@ const themeOptions: ThemeOptions = {
   },
 };
 
-function ScrollTop({ children }: Props) {
+function ScrollTop({ children }: HasKidsProps) {
     const trigger = useScrollTrigger({
       disableHysteresis: true,
       threshold: 100,
@@ -162,24 +167,24 @@ function ScrollTop({ children }: Props) {
     );
 }
 
-export default function Layout({ children }: Props) {
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+const darkTheme = createTheme({ ...themeOptions, palette: darkPalette });
+const lightTheme = createTheme({ ...themeOptions, palette: lightPalette });
+let isDark: null | boolean = null;
 
-    const theme = React.useMemo(() => createTheme({ 
-            ...themeOptions, 
-            palette: prefersDarkMode ? darkPalette : lightPalette,
-        }),
-        [prefersDarkMode],
-    );
+export default function Layout ({ children }: HasKidsProps) {
+    const [ darkMode, setDarkMode ] = localStorage('darkMode', useMediaQuery('(prefers-color-scheme: dark)'));
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
             <CssBaseline />
             <AppBar position="static">
                 <Toolbar variant="dense" id="back-to-top-anchor">
                     <Typography variant="h6" color="inherit" component="div">
-                        <Link component={GLink} to="/" underline="none">STAR tracker</Link>
+                        <Link component={GLink} to="/" underline="none" color={darkMode ? 'inherit' : 'black'}>STAR tracker</Link>
                     </Typography>
+                    <IconButton sx={{ ml: 1 }} onClick={() => console.log(darkMode, setDarkMode(!darkMode))} color="inherit">
+                        {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <Container>{children}</Container>
@@ -190,4 +195,4 @@ export default function Layout({ children }: Props) {
             </ScrollTop>
         </ThemeProvider>
     );
-  }
+};
